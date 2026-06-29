@@ -1,1 +1,788 @@
-t
+local BLOCKED_GAME_IDS = {
+    7711635737,
+    2534724415,
+    4111023553,
+    17625359962,
+    1008451066,
+    103506116893376,
+
+    
+}
+
+local currentGameId = game.GameId
+
+for _, blockedId in ipairs(BLOCKED_GAME_IDS) do
+    if currentGameId == blockedId then
+        game.Players.LocalPlayer:Kick("This Game ban you, if you use this Hacks. Search on SkriptBlox to another skript. --Poloniu")
+        return
+    end
+end
+
+
+
+-- Roblox Local Script - Poloniu Key System (Fixed - English)
+-- Place this script in StarterPlayer > StarterPlayerScripts
+
+if game.Players.LocalPlayer:FindFirstChild("PoloniuLoaded") then
+    return
+end
+
+local valueObject = Instance.new("BoolValue")
+valueObject.Name = "PoloniuLoaded"
+valueObject.Parent = game.Players.LocalPlayer
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local localPlayer = Players.LocalPlayer
+local playerGui = localPlayer:WaitForChild("PlayerGui")
+
+-- GUI visibility state
+local guiVisible = true
+local keyAccepted = false
+local selectorGui = nil
+local screenGui = nil
+
+local function createKeyGui()
+    screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "PoloniuGui"
+    screenGui.ResetOnSpawn = false
+    screenGui.Parent = playerGui
+
+    local backgroundPanel = Instance.new("Frame")
+    backgroundPanel.Size = UDim2.new(1, 0, 1, 0)
+    backgroundPanel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    backgroundPanel.BackgroundTransparency = 0.7
+    backgroundPanel.Parent = screenGui
+
+    local dialogBox = Instance.new("Frame")
+    dialogBox.Name = "DialogBox"
+    dialogBox.Size = UDim2.new(0, 420, 0, 340)
+    dialogBox.Position = UDim2.new(0.5, -210, 0.5, -170)
+    dialogBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    dialogBox.BorderColor3 = Color3.fromRGB(0, 150, 255)
+    dialogBox.BorderSizePixel = 3
+    dialogBox.Parent = screenGui
+
+    -- Title
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Size = UDim2.new(1, -40, 0, 50)
+    titleLabel.Position = UDim2.new(0, 0, 0, 0)
+    titleLabel.BackgroundColor3 = Color3.fromRGB(0, 100, 200)
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    titleLabel.TextScaled = true
+    titleLabel.Font = Enum.Font.GothamBold
+    titleLabel.Text = "Poloniu - Key System"
+    titleLabel.BorderSizePixel = 0
+    titleLabel.Parent = dialogBox
+
+    -- Close/Minimize Button
+    local closeButton = Instance.new("TextButton")
+    closeButton.Size = UDim2.new(0, 40, 0, 50)
+    closeButton.Position = UDim2.new(1, -40, 0, 0)
+    closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+    closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    closeButton.TextScaled = true
+    closeButton.Font = Enum.Font.GothamBold
+    closeButton.Text = "X"
+    closeButton.BorderSizePixel = 0
+    closeButton.Parent = dialogBox
+
+    closeButton.MouseEnter:Connect(function() closeButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50) end)
+    closeButton.MouseLeave:Connect(function() closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50) end)
+
+    -- Info Label
+    local infoLabel = Instance.new("TextLabel")
+    infoLabel.Size = UDim2.new(1, -20, 0, 30)
+    infoLabel.Position = UDim2.new(0, 10, 0, 60)
+    infoLabel.BackgroundTransparency = 1
+    infoLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+    infoLabel.TextScaled = true
+    infoLabel.Font = Enum.Font.Gotham
+    infoLabel.Text = "Please enter your key:"
+    infoLabel.TextXAlignment = Enum.TextXAlignment.Left
+    infoLabel.Parent = dialogBox
+
+    -- Key TextBox
+    local keyInput = Instance.new("TextBox")
+    keyInput.Size = UDim2.new(1, -20, 0, 40)
+    keyInput.Position = UDim2.new(0, 10, 0, 95)
+    keyInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    keyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+    keyInput.TextScaled = true
+    keyInput.Font = Enum.Font.Gotham
+    keyInput.PlaceholderText = "Enter key here..."
+    keyInput.PlaceholderColor3 = Color3.fromRGB(100, 100, 100)
+    keyInput.BorderColor3 = Color3.fromRGB(0, 150, 255)
+    keyInput.BorderSizePixel = 2
+    keyInput.Parent = dialogBox
+
+    -- "Get Key" label
+    local getKeyTitle = Instance.new("TextLabel")
+    getKeyTitle.Size = UDim2.new(1, -20, 0, 22)
+    getKeyTitle.Position = UDim2.new(0, 10, 0, 148)
+    getKeyTitle.BackgroundTransparency = 1
+    getKeyTitle.TextColor3 = Color3.fromRGB(160, 160, 160)
+    getKeyTitle.TextScaled = true
+    getKeyTitle.Font = Enum.Font.Gotham
+    getKeyTitle.Text = "Get your key on Discord:"
+    getKeyTitle.TextXAlignment = Enum.TextXAlignment.Left
+    getKeyTitle.Parent = dialogBox
+
+    local getKeyLink = Instance.new("TextLabel")
+    getKeyLink.Size = UDim2.new(1, -20, 0, 30)
+    getKeyLink.Position = UDim2.new(0, 10, 0, 170)
+    getKeyLink.BackgroundTransparency = 1
+    getKeyLink.TextColor3 = Color3.fromRGB(80, 180, 255)
+    getKeyLink.TextScaled = true
+    getKeyLink.Font = Enum.Font.GothamBold
+    getKeyLink.Text = "discord.gg/tkXsVrdgn"
+    getKeyLink.TextXAlignment = Enum.TextXAlignment.Left
+    getKeyLink.Parent = dialogBox
+
+    -- Submit Button
+    local submitButton = Instance.new("TextButton")
+    submitButton.Size = UDim2.new(1, -20, 0, 42)
+    submitButton.Position = UDim2.new(0, 10, 0, 213)
+    submitButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+    submitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    submitButton.TextScaled = true
+    submitButton.Font = Enum.Font.GothamBold
+    submitButton.Text = "Submit"
+    submitButton.BorderSizePixel = 0
+    submitButton.Parent = dialogBox
+
+    submitButton.MouseEnter:Connect(function() submitButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255) end)
+    submitButton.MouseLeave:Connect(function() submitButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255) end)
+
+    -- Status Label
+    local statusLabel = Instance.new("TextLabel")
+    statusLabel.Size = UDim2.new(1, -20, 0, 25)
+    statusLabel.Position = UDim2.new(0, 10, 0, 265)
+    statusLabel.BackgroundTransparency = 1
+    statusLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
+    statusLabel.TextScaled = true
+    statusLabel.Font = Enum.Font.Gotham
+    statusLabel.Text = ""
+    statusLabel.TextXAlignment = Enum.TextXAlignment.Center
+    statusLabel.Parent = dialogBox
+
+    -- Powered by label
+    local poweredLabel = Instance.new("TextLabel")
+    poweredLabel.Size = UDim2.new(1, -20, 0, 20)
+    poweredLabel.Position = UDim2.new(0, 10, 0, 312)
+    poweredLabel.BackgroundTransparency = 1
+    poweredLabel.TextColor3 = Color3.fromRGB(80, 80, 80)
+    poweredLabel.TextScaled = true
+    poweredLabel.Font = Enum.Font.Gotham
+    poweredLabel.Text = "Poloniu System v1.0"
+    poweredLabel.TextXAlignment = Enum.TextXAlignment.Center
+    poweredLabel.Parent = dialogBox
+
+    -- ==================== YOUR KEY HERE ====================
+    local correctKey = "WASDSDFRDFGFED34543223223DS"
+    -- ========================================================
+
+    local isMinimized = false
+    local function toggleMinimize()
+        isMinimized = not isMinimized
+        local elements = {infoLabel, keyInput, getKeyTitle, getKeyLink, submitButton, statusLabel, poweredLabel}
+        if isMinimized then
+            dialogBox:TweenSize(UDim2.new(0, 420, 0, 50), Enum.EasingDirection.InOut, Enum.EasingStyle.Quad, 0.3, true)
+            closeButton.Text = "+"
+            for _, e in ipairs(elements) do e.Visible = false end
+        else
+            dialogBox:TweenSize(UDim2.new(0, 420, 0, 340), Enum.EasingDirection.InOut, Enum.EasingStyle.Quad, 0.3, true)
+            closeButton.Text = "X"
+            for _, e in ipairs(elements) do e.Visible = true end
+        end
+    end
+
+    local function checkKey()
+        local entered = keyInput.Text
+        if entered == "" then
+            statusLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
+            statusLabel.Text = "❌ Please enter a key!"
+            return
+        end
+        if entered == correctKey then
+            statusLabel.TextColor3 = Color3.fromRGB(100, 255, 100)
+            statusLabel.Text = "✓ Key accepted! Loading..."
+            keyAccepted = true
+
+            -- ===== WEBHOOK (NON-BLOCKING) =====
+            task.spawn(function()
+                local placeId  = game.PlaceId
+                local gameId   = game.GameId
+                local plrName  = localPlayer.Name
+                local plrId    = localPlayer.UserId
+                _G.Poloniu = true
+
+                local gameName = "Unknown"
+                pcall(function()
+                    gameName = game:GetService("MarketplaceService"):GetProductInfo(placeId).Name
+                end)
+
+                local joinLink = "roblox://experiences/start?placeId=" .. placeId .. "&userId=" .. plrId
+
+                local payload = game:GetService("HttpService"):JSONEncode({
+                    embeds = {{
+                        title = "✅ Poloniu - Key Accepted",
+                        color = 3447003,
+                        fields = {
+                            { name = "👤 Player",    value = plrName .. " (`" .. plrId .. "`)", inline = false },
+                            { name = "🎮 Game",      value = gameName .. "\nPlace ID: `" .. placeId .. "`\nGame ID: `" .. gameId .. "`", inline = false },
+                            { name = "🔗 Join Link", value = "[Click to join](" .. joinLink .. ")", inline = false },
+                        },
+                        footer = { text = "Poloniu System" }
+                    }}
+                })
+
+                local WEBHOOK = "https://discord.com/api/webhooks/1518666410165932233/gx2N-OOw-CjFmyn4_nisoNqVBi1RZck2Bf86tLY7jIfXh1sCNRx3ibrQCFyYoJI67sVU"
+
+                pcall(function()
+                    local reqFunc = syn and syn.request or http and http.request or request
+                    if reqFunc then
+                        reqFunc({
+                            Url = WEBHOOK,
+                            Method = "POST",
+                            Headers = { ["Content-Type"] = "application/json" },
+                            Body = payload
+                        })
+                    end
+                end)
+            end)
+            -- ===== END WEBHOOK =====
+
+            task.wait(0.5)
+            screenGui.Parent = nil
+            createSelectorGui()
+        else
+            keyInput.BackgroundColor3 = Color3.fromRGB(150, 50, 50)
+            keyInput.Text = ""
+            keyInput.PlaceholderText = "Wrong key!"
+            statusLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
+            statusLabel.Text = "❌ Invalid key!"
+            task.wait(1.5)
+            if keyInput.Parent then
+                keyInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+                keyInput.PlaceholderText = "Enter key here..."
+                statusLabel.Text = ""
+            end
+        end
+    end
+
+    closeButton.MouseButton1Click:Connect(toggleMinimize)
+    submitButton.MouseButton1Click:Connect(checkKey)
+    keyInput.FocusLost:Connect(function(enter) if enter then checkKey() end end)
+    keyInput:CaptureFocus()
+
+    return screenGui
+end
+
+-- ==================== POLONIU LABEL SYSTEM ====================
+local TAG_NAME = "PoloniuUser"
+local labelBillboards = {}
+local labelConnections = {}
+
+local function applyLabel(player)
+    if player == localPlayer then return end
+    local char = player.Character
+    if not char then return end
+    local head = char:FindFirstChild("Head")
+    if not head then return end
+    if not char:FindFirstChild(TAG_NAME) then return end
+
+    if labelBillboards[player.UserId] then
+        labelBillboards[player.UserId]:Destroy()
+    end
+
+    local bb = Instance.new("BillboardGui")
+    bb.Name = "PoloniuBillboard"
+    bb.Size = UDim2.new(0, 140, 0, 40)
+    bb.StudsOffset = Vector3.new(0, 3.2, 0)
+    bb.AlwaysOnTop = true
+    bb.Parent = head
+
+    local lbl = Instance.new("TextLabel")
+    lbl.Size = UDim2.new(1, 0, 1, 0)
+    lbl.BackgroundTransparency = 1
+    lbl.TextColor3 = Color3.fromRGB(0, 200, 255)
+    lbl.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+    lbl.TextStrokeTransparency = 0
+    lbl.TextScaled = true
+    lbl.Font = Enum.Font.GothamBold
+    lbl.Text = "Poloniu"
+    lbl.Parent = bb
+
+    labelBillboards[player.UserId] = bb
+end
+
+local function watchPlayer(player)
+    if player == localPlayer then return end
+
+    local conn = player.CharacterAdded:Connect(function()
+        task.wait(1)
+        applyLabel(player)
+    end)
+    labelConnections[player.UserId] = conn
+
+    applyLabel(player)
+end
+
+local function removePlayer(player)
+    if labelBillboards[player.UserId] then
+        labelBillboards[player.UserId]:Destroy()
+        labelBillboards[player.UserId] = nil
+    end
+    if labelConnections[player.UserId] then
+        labelConnections[player.UserId]:Disconnect()
+        labelConnections[player.UserId] = nil
+    end
+end
+
+for _, p in ipairs(Players:GetPlayers()) do watchPlayer(p) end
+Players.PlayerAdded:Connect(watchPlayer)
+Players.PlayerRemoving:Connect(removePlayer)
+
+RunService.Heartbeat:Connect(function()
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player == localPlayer then continue end
+        local char = player.Character
+        if char then
+            local hasTag = char:FindFirstChild(TAG_NAME) ~= nil
+            local hasLabel = labelBillboards[player.UserId] ~= nil
+            if hasTag and not hasLabel then
+                applyLabel(player)
+            elseif not hasTag and hasLabel then
+                labelBillboards[player.UserId]:Destroy()
+                labelBillboards[player.UserId] = nil
+            end
+        end
+    end
+end)
+
+local function tagSelf()
+    local char = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+    if not char:FindFirstChild(TAG_NAME) then
+        local tag = Instance.new("StringValue")
+        tag.Name = TAG_NAME
+        tag.Value = localPlayer.Name
+        tag.Parent = char
+    end
+end
+
+tagSelf()
+-- ==============================================================
+
+-- ==================== JSONBIN CONFIGURATION ====================
+local JSONBIN_API_KEY = "$2a$10$J5/Yo51y/P4eJd4GqzLVvOLzkrx0VQXr7X6Jg5AdtdI1MbRFCaLO2"
+local JSONBIN_ID = "6a397825f5f4af5e291e93bf"
+local JSONBIN_URL = "https://api.jsonbin.io/v3/b/" .. JSONBIN_ID .. "/latest"
+
+local httpService = game:GetService("HttpService")
+
+local requestFunc = request or http_request or (syn and syn.request)
+
+local function fetchScriptFromJsonBin()
+    local success, result = pcall(function()
+        local response = requestFunc({
+            Url = JSONBIN_URL,
+            Method = "GET",
+            Headers = {
+                ["X-Master-Key"] = JSONBIN_API_KEY
+            }
+        })
+
+        return httpService:JSONDecode(response.Body)
+    end)
+
+    if success then
+        print("✅ JSONBin data fetched successfully!")
+        return result
+    else
+        print("❌ JSONBin fetch error: " .. tostring(result))
+        return nil
+    end
+end
+
+-- ==================== SCRIPT SELECTOR UI =====
+function createSelectorGui()
+    selectorGui = Instance.new("ScreenGui")
+    selectorGui.Name = "PoloniuSelector"
+    selectorGui.ResetOnSpawn = false
+    selectorGui.Parent = playerGui
+
+    local bg = Instance.new("Frame")
+    bg.Size = UDim2.new(1, 0, 1, 0)
+    bg.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    bg.BackgroundTransparency = 0.6
+    bg.Parent = selectorGui
+
+    local box = Instance.new("Frame")
+    box.Size = UDim2.new(0, 480, 0, 420)
+    box.Position = UDim2.new(0.5, -240, 0.5, -210)
+    box.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
+    box.BorderColor3 = Color3.fromRGB(0, 150, 255)
+    box.BorderSizePixel = 3
+    box.Parent = selectorGui
+
+    -- Title
+    local title = Instance.new("TextLabel")
+    title.Size = UDim2.new(1, -40, 0, 50)
+    title.Position = UDim2.new(0, 0, 0, 0)
+    title.BackgroundColor3 = Color3.fromRGB(0, 100, 200)
+    title.BorderSizePixel = 0
+    title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    title.TextScaled = true
+    title.Font = Enum.Font.GothamBold
+    title.Text = "Poloniu — Which script do you want to run?"
+    title.Parent = box
+
+    -- Close button for selector
+    local closeSelectorBtn = Instance.new("TextButton")
+    closeSelectorBtn.Size = UDim2.new(0, 40, 0, 50)
+    closeSelectorBtn.Position = UDim2.new(1, -40, 0, 0)
+    closeSelectorBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+    closeSelectorBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    closeSelectorBtn.TextScaled = true
+    closeSelectorBtn.Font = Enum.Font.GothamBold
+    closeSelectorBtn.Text = "X"
+    closeSelectorBtn.BorderSizePixel = 0
+    closeSelectorBtn.Parent = box
+
+    closeSelectorBtn.MouseEnter:Connect(function() closeSelectorBtn.BackgroundColor3 = Color3.fromRGB(255, 50, 50) end)
+    closeSelectorBtn.MouseLeave:Connect(function() closeSelectorBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50) end)
+
+    closeSelectorBtn.MouseButton1Click:Connect(function()
+        print("Close Button clicked")
+        if selectorGui then
+            selectorGui.Enabled = false
+        end
+    end)
+
+    -- Subtitle
+    local sub = Instance.new("TextLabel")
+    sub.Size = UDim2.new(1, -20, 0, 30)
+    sub.Position = UDim2.new(0, 10, 0, 58)
+    sub.BackgroundTransparency = 1
+    sub.TextColor3 = Color3.fromRGB(170, 170, 170)
+    sub.TextScaled = true
+    sub.Font = Enum.Font.Gotham
+    sub.Text = "Select an option below:"
+    sub.TextXAlignment = Enum.TextXAlignment.Left
+    sub.Parent = box
+
+    -- AUTO Button
+    local autoBtn = Instance.new("TextButton")
+    autoBtn.Size = UDim2.new(1, -20, 0, 70)
+    autoBtn.Position = UDim2.new(0, 10, 0, 100)
+    autoBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 220)
+    autoBtn.BorderSizePixel = 0
+    autoBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    autoBtn.Font = Enum.Font.GothamBold
+    autoBtn.TextScaled = true
+    autoBtn.Text = ""
+    autoBtn.Parent = box
+
+    local autoTitle = Instance.new("TextLabel")
+    autoTitle.Size = UDim2.new(1, -10, 0, 30)
+    autoTitle.Position = UDim2.new(0, 10, 0, 8)
+    autoTitle.BackgroundTransparency = 1
+    autoTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+    autoTitle.Font = Enum.Font.GothamBold
+    autoTitle.TextScaled = true
+    autoTitle.Text = "⚡ Auto"
+    autoTitle.TextXAlignment = Enum.TextXAlignment.Left
+    autoTitle.Parent = autoBtn
+
+    local autoDesc = Instance.new("TextLabel")
+    autoDesc.Size = UDim2.new(1, -10, 0, 30)
+    autoDesc.Position = UDim2.new(0, 10, 0, 38)
+    autoDesc.BackgroundTransparency = 1
+    autoDesc.TextColor3 = Color3.fromRGB(200, 220, 255)
+    autoDesc.Font = Enum.Font.Gotham
+    autoDesc.TextScaled = true
+    autoDesc.Text = "Detects the best script for your game or runs a universal script."
+    autoDesc.TextXAlignment = Enum.TextXAlignment.Left
+    autoDesc.Parent = autoBtn
+
+    autoBtn.MouseEnter:Connect(function() autoBtn.BackgroundColor3 = Color3.fromRGB(0, 145, 255) end)
+    autoBtn.MouseLeave:Connect(function() autoBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 220) end)
+
+    -- UNIVERSAL SCRIPTS Button
+    local univBtn = Instance.new("TextButton")
+    univBtn.Size = UDim2.new(1, -20, 0, 70)
+    univBtn.Position = UDim2.new(0, 10, 0, 180)
+    univBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 220)
+    univBtn.BorderSizePixel = 0
+    univBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    univBtn.Font = Enum.Font.GothamBold
+    univBtn.TextScaled = true
+    univBtn.Text = ""
+    univBtn.Parent = box
+
+    local univTitle = Instance.new("TextLabel")
+    univTitle.Size = UDim2.new(1, -10, 0, 30)
+    univTitle.Position = UDim2.new(0, 10, 0, 8)
+    univTitle.BackgroundTransparency = 1
+    univTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+    univTitle.Font = Enum.Font.GothamBold
+    univTitle.TextScaled = true
+    univTitle.Text = "🌐 Universal Scripts"
+    univTitle.TextXAlignment = Enum.TextXAlignment.Left
+    univTitle.Parent = univBtn
+
+    local univDesc = Instance.new("TextLabel")
+    univDesc.Size = UDim2.new(1, -10, 0, 30)
+    univDesc.Position = UDim2.new(0, 10, 0, 38)
+    univDesc.BackgroundTransparency = 1
+    univDesc.TextColor3 = Color3.fromRGB(200, 220, 255)
+    univDesc.Font = Enum.Font.Gotham
+    univDesc.TextScaled = true
+    univDesc.Text = "General purpose scripts that work in most games."
+    univDesc.TextXAlignment = Enum.TextXAlignment.Left
+    univDesc.Parent = univBtn
+
+    univBtn.MouseEnter:Connect(function() univBtn.BackgroundColor3 = Color3.fromRGB(0, 145, 255) end)
+    univBtn.MouseLeave:Connect(function() univBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 220) end)
+
+    -- LIBRARY Button
+    local libBtn = Instance.new("TextButton")
+    libBtn.Size = UDim2.new(1, -20, 0, 70)
+    libBtn.Position = UDim2.new(0, 10, 0, 260)
+    libBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    libBtn.BorderSizePixel = 0
+    libBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    libBtn.Font = Enum.Font.GothamBold
+    libBtn.TextScaled = true
+    libBtn.Text = ""
+    libBtn.Parent = box
+
+    local libTitle = Instance.new("TextLabel")
+    libTitle.Size = UDim2.new(1, -10, 0, 30)
+    libTitle.Position = UDim2.new(0, 10, 0, 8)
+    libTitle.BackgroundTransparency = 1
+    libTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+    libTitle.Font = Enum.Font.GothamBold
+    libTitle.TextScaled = true
+    libTitle.Text = "📚 Script Library"
+    libTitle.TextXAlignment = Enum.TextXAlignment.Left
+    libTitle.Parent = libBtn
+
+    local libDesc = Instance.new("TextLabel")
+    libDesc.Size = UDim2.new(1, -10, 0, 30)
+    libDesc.Position = UDim2.new(0, 10, 0, 38)
+    libDesc.BackgroundTransparency = 1
+    libDesc.TextColor3 = Color3.fromRGB(190, 190, 190)
+    libDesc.Font = Enum.Font.Gotham
+    libDesc.TextScaled = true
+    libDesc.Text = "Browse all scripts in our collection."
+    libDesc.TextXAlignment = Enum.TextXAlignment.Left
+    libDesc.Parent = libBtn
+
+    libBtn.MouseEnter:Connect(function() libBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80) end)
+    libBtn.MouseLeave:Connect(function() libBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60) end)
+
+    -- Status label
+    local statusMsg = Instance.new("TextLabel")
+    statusMsg.Size = UDim2.new(1, -20, 0, 25)
+    statusMsg.Position = UDim2.new(0, 10, 0, 362)
+    statusMsg.BackgroundTransparency = 1
+    statusMsg.TextColor3 = Color3.fromRGB(255, 100, 100)
+    statusMsg.TextScaled = true
+    statusMsg.Font = Enum.Font.Gotham
+    statusMsg.Text = ""
+    statusMsg.TextXAlignment = Enum.TextXAlignment.Center
+    statusMsg.Parent = box
+
+    -- Footer
+    local footer = Instance.new("TextLabel")
+    footer.Size = UDim2.new(1, -20, 0, 20)
+    footer.Position = UDim2.new(0, 10, 0, 392)
+    footer.BackgroundTransparency = 1
+    footer.TextColor3 = Color3.fromRGB(70, 70, 70)
+    footer.TextScaled = true
+    footer.Font = Enum.Font.Gotham
+    footer.Text = "Poloniu System v1.0 | F1 to toggle"
+    footer.TextXAlignment = Enum.TextXAlignment.Center
+    footer.Parent = box
+
+    -- AUTO click
+    autoBtn.MouseButton1Click:Connect(function()
+        print("⚡ AUTO button clicked")
+        statusMsg.Text = "⏳ Loading script..."
+        statusMsg.TextColor3 = Color3.fromRGB(255, 200, 100)
+        
+        task.spawn(function()
+            local placeId = tostring(game.PlaceId)
+            print("📍 PlaceId: " .. placeId)
+            
+            local jsonData = fetchScriptFromJsonBin()
+            
+            if not jsonData then
+                print("❌ JSONBin Error!")
+                statusMsg.TextColor3 = Color3.fromRGB(255, 100, 100)
+                statusMsg.Text = "❌ Error loading scripts!"
+                return
+            end
+            print("===== JSON DATA =====")
+            print(httpService:JSONEncode(jsonData))
+            
+            print("✅ JSONBin data loaded!")
+            local autoScripts = jsonData.record and jsonData.record.Auto or {}
+            local scriptFound = false
+            local scriptToLoad = nil
+            
+            -- Search for PlaceId in Auto-Scripts
+            for _, scriptEntry in ipairs(autoScripts) do
+                if scriptEntry[placeId] then
+                    scriptToLoad = scriptEntry[placeId]
+                    scriptFound = true
+                    print("✅ Script found for PlaceId " .. placeId)
+                    break
+                end
+            end
+            
+            if scriptFound and scriptToLoad then
+                statusMsg.TextColor3 = Color3.fromRGB(100, 255, 100)
+                statusMsg.Text = "✓ Script found! Executing..."
+                
+                task.wait(1)
+                if selectorGui then
+                    selectorGui.Visible = false
+                end
+                
+                -- Execute the script
+                local execSuccess, execError = pcall(function()
+                    print("▶️ Executing script...")
+                    loadstring(scriptToLoad)()
+                end)
+                
+                if not execSuccess then
+                    print("❌ Script Error: " .. tostring(execError))
+                    statusMsg.TextColor3 = Color3.fromRGB(255, 100, 100)
+                    statusMsg.Text = "❌ Script execution error!"
+                else
+                    print("✅ Script executed successfully!")
+                end
+            else
+                print("⚠️ No script found for PlaceId " .. placeId)
+                statusMsg.TextColor3 = Color3.fromRGB(255, 100, 100)
+                statusMsg.Text = "⚠️ No script found for this game!"
+            end
+        end)
+    end)
+
+    -- UNIVERSAL SCRIPTS click
+    univBtn.MouseButton1Click:Connect(function()
+        print("🌐 Universal Scripts button clicked")
+        
+        if selectorGui then
+            selectorGui.Enabled = false
+        end
+        
+        local notif = Instance.new("TextLabel")
+        notif.Size = UDim2.new(0, 300, 0, 60)
+        notif.Position = UDim2.new(0.5, -150, 0.5, -30)
+        notif.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        notif.BorderColor3 = Color3.fromRGB(0, 150, 255)
+        notif.BorderSizePixel = 2
+        notif.TextColor3 = Color3.fromRGB(100, 200, 100)
+        notif.TextScaled = true
+        notif.Font = Enum.Font.GothamBold
+        notif.Text = "⏳ Loading Universal Script..."
+        notif.Parent = playerGui
+        
+        task.spawn(function()
+            local success, err = pcall(function()
+                print("Loading: https://raw.githubusercontent.com/Noah2012Noah/Skripthubv2/refs/heads/main/Universall")
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/Noah2012Noah/Skripthubv2/refs/heads/main/Universall"))()
+            end)
+            
+            if not success then
+                print("❌ Universal Script Error: " .. tostring(err))
+                notif.TextColor3 = Color3.fromRGB(255, 100, 100)
+                notif.Text = "❌ Error loading!"
+            else
+                print("✅ Universal Script loaded!")
+                notif.TextColor3 = Color3.fromRGB(100, 255, 100)
+                notif.Text = "✓ Universal Script loaded!"
+            end
+            
+            task.wait(3)
+            notif:Destroy()
+        end)
+    end)
+
+    -- LIBRARY click (BIB)
+    libBtn.MouseButton1Click:Connect(function()
+        print("📚 Script Library (BIB) button clicked")
+        
+        if selectorGui then
+            selectorGui.Enabled = false
+        end
+        
+        local notif = Instance.new("TextLabel")
+        notif.Size = UDim2.new(0, 300, 0, 60)
+        notif.Position = UDim2.new(0.5, -150, 0.5, -30)
+        notif.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        notif.BorderColor3 = Color3.fromRGB(0, 150, 255)
+        notif.BorderSizePixel = 2
+        notif.TextColor3 = Color3.fromRGB(100, 200, 100)
+        notif.TextScaled = true
+        notif.Font = Enum.Font.GothamBold
+        notif.Text = "⏳ Loading Script Library..."
+        notif.Parent = playerGui
+        
+        task.spawn(function()
+            local success, err = pcall(function()
+                print("Loading: https://raw.githubusercontent.com/Noah2012Noah/Skripthubv2/refs/heads/main/bib")
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/dsfsaSasd/Skripthubv2/e0ea5266daa5e6e5a31df450dc1c3d2e3be3f88f/bib"))()
+            end)
+            
+            if not success then
+                print("❌ BIB Script Error: " .. tostring(err))
+                notif.TextColor3 = Color3.fromRGB(255, 100, 100)
+                notif.Text = "❌ Error loading!"
+            else
+                print("✅ Script Library loaded!")
+                notif.TextColor3 = Color3.fromRGB(100, 255, 100)
+                notif.Text = "✓ Script Library loaded!"
+            end
+            
+            task.wait(3)
+            notif:Destroy()
+        end)
+    end)
+end
+
+-- F1 Key Toggle Function
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if input.KeyCode == Enum.KeyCode.F1 then
+        if not keyAccepted then
+            -- Toggle key system GUI visibility
+            if screenGui then
+                if screenGui.Parent then
+                    screenGui.Parent = nil
+                else
+                    screenGui.Parent = playerGui
+                end
+            end
+        else
+            -- Toggle selector GUI visibility
+            if selectorGui then
+                if selectorGui.Parent then
+                    selectorGui.Parent = nil
+                else
+                    selectorGui.Parent = playerGui
+                end
+            end
+        end
+    end
+end)
+
+-- Initialize key GUI
+screenGui = createKeyGui()
+
+print("✅ Poloniu System loaded! Press F1 to toggle the GUI.")
